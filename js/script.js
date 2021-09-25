@@ -34,12 +34,12 @@ guess.addEventListener("click", function (e) {
  
     letter.value = "";
     message.innerText = "";
-    console.log(capture);
+   // console.log(capture);
     //You should see the letter you enter into the input field in the console when the Guess button is clicked. 
 
 
     checkCheck = checkInput(capture);
-    console.log(checkCheck)
+   // console.log(checkCheck)
    
 })
 
@@ -47,7 +47,7 @@ const checkInput = function (input) {
     const acceptedLetter = /[a-zA-Z]/;
     //First, check if the input is empty. 
     if (!input) {
-        message.innerText = "It's blank silly!."
+        message.innerText = "It's blank silly!"
     } else if (input.length > 1) {
         message.innerText = "Please only put one letter."
     } else if (!input.match(/[a-zA-Z]/)) {
@@ -64,6 +64,49 @@ const makeGuess = function (letter) {
     } else {
         guessedLetters.push(uppercaseLetter)
     };
-    console.log(guessedLetters);
+    //console.log(guessedLetters);
+    updatePage();
+    updateWord(guessedLetters);
 };
 
+const updatePage = function () {
+    guessTheLetter.innerText = "";
+    for (let guess in guessedLetters) {
+        const li = document.createElement("li");
+        li.innerText = guessedLetters[guess];
+        guessTheLetter.append(li);
+       
+    };
+};
+
+const updateWord = function (guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    const newUpdate = []
+    //console.log(wordArray);
+    // Check if the wordArray contains any letters from the guessedLetters array. 
+    for (let letter in wordArray) {
+        if (guessedLetters.includes(wordArray[letter])) {
+            newUpdate.push(wordArray[letter])
+        } else {
+            newUpdate.push("●")
+        };
+    };
+        //replace circle with that letter
+    //}
+    // If it does contain any of the letters, update the circle symbol with the correct letter. 
+    // Hint: You’ll want to create a new array with the updated characters and then use join()
+    //      to update the empty paragraph where the word in progress will appear.
+   
+    
+    wordInProgress.innerHTML = newUpdate.join("")
+    gameWin();
+};
+
+const gameWin = function () {
+    if (word.toUpperCase() === wordInProgress.innerText) {
+        //(word.toUpperCase() === wordInProgress.innerText)
+        message.classList.add("win");
+        message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+    }
+};
