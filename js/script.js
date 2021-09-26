@@ -12,7 +12,7 @@ const remainingGuessesElement = document.querySelector(".remaining");
 
 //for testing
 let word = "magnolia";
-const guessedLetters = [];
+let guessedLetters = [];
 let remainingGuesses = 8;
 
 const getWord = async function () {
