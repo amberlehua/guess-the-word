@@ -5,6 +5,7 @@ const wordInProgress = document.querySelector(".word-in-progress");
 const remaining = document.querySelector("span");
 const message = document.querySelector(".message");
 const playAgain = document.querySelector(".play-again")
+const remainingGuessesElement = document.querySelector(".remaining");
 
 
 
@@ -25,10 +26,10 @@ const getWord = async function () {
 
 getWord()
 
-const update = function () {
+const update = function (word) {
     const letters = word.split("");
     const letterCount = [];
-    for (const key in letters) {
+    for (const key of letters) {
         letterCount.push("●")
     }
     const totalLetters = letterCount.join("");
@@ -128,8 +129,10 @@ const countGuesses = function (guess) {
         remainingGuesses -= 1;
     }
     if (remainingGuesses === 0)  {
-        message.innerText = `Game over! Your word was ${word}`
-        remaining.innerText = `${remainingGuesses} guesses`
+        startOver();
+        message.innerText = `Game over! Your word was ${word}`;
+        remaining.innerText = `${remainingGuesses} guesses`;
+        
     } else if (remainingGuesses === 1) {
         remaining.innerText = `${remainingGuesses} guess`
     } else {
@@ -142,8 +145,39 @@ const gameWin = function () {
         //(word.toUpperCase() === wordInProgress.innerText)
         message.classList.add("win");
         message.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
-
+        startOver();
     }
-    
-
 };
+
+const startOver = function () {
+    guess.classList.add("hide");
+    remainingGuessesElement.classList.add("hide");
+    guessTheLetter.classList.add("hide");
+    playAgain.classList.remove("hide");
+    document.querySelector("input").classList.add("hide");
+    document.querySelector("label").classList.add("hide");
+}
+
+
+playAgain.addEventListener("click", function () {
+    message.classList.remove("win");
+    guessedLetters = [];
+    remainingGuesses = 8;
+    remaining.innerText = `${remainingGuesses} guesses`;
+    guessTheLetter.innerText = "";
+    message.innerHTML = "";
+
+    getWord();
+
+    
+    guess.classList.remove("hide");
+    remainingGuessesElement.classList.remove("hide");
+    guessTheLetter.classList.remove("hide");
+    playAgain.classList.add("hide");
+    document.querySelector("input").classList.remove("hide");
+    document.querySelector("label").classList.remove("hide");
+
+});
+// Add a click event listener for the Play Again button. 
+// Remove the class of “win” applied to the message element. 
+// Empty the message text and the unordered list where the guessed letters appear.
