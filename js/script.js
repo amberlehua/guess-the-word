@@ -12,7 +12,7 @@ const remainingGuessesElement = document.querySelector(".remaining");
 
 //for testing
 let word = "magnolia";
-const guessedLetters = [];
+let guessedLetters = [];
 let remainingGuesses = 8;
 
 const getWord = async function () {
@@ -33,39 +33,27 @@ const update = function (word) {
         letterCount.push("●")
     }
     const totalLetters = letterCount.join("");
-    //console.log(totalLetters)
     wordInProgress.innerHTML = totalLetters;
-    //for length of letterCount,letters.push("●");
 }
 
 
 
 guess.addEventListener("click", function (e) {
     e.preventDefault();
-   
-    //Create and name a variable to capture the value of the input. 
     const capture = letter.value;
-    //Log out the value of the variable capturing the input. Then, empty the value of the input. 
- 
     letter.value = "";
     message.innerText = "";
-   // console.log(capture);
-    //You should see the letter you enter into the input field in the console when the Guess button is clicked. 
-
-
     checkCheck = checkInput(capture);
-   // console.log(checkCheck)
    
 })
 
 const checkInput = function (input) {
     const acceptedLetter = /[a-zA-Z]/;
-    //First, check if the input is empty. 
     if (!input) {
         message.innerText = "It's blank silly!"
     } else if (input.length > 1) {
         message.innerText = "Please only put one letter."
-    } else if (!input.match(/[a-zA-Z]/)) {
+    } else if (!input.match(acceptedLetter)) {
         message.innerText = "Please enter a letter from A-Z."
     } else {
         makeGuess(input);
@@ -80,13 +68,12 @@ const makeGuess = function (letter) {
         countGuesses(uppercaseLetter)
         guessedLetters.push(uppercaseLetter)
     };
-    //console.log(guessedLetters);
     updatePage();
     updateWord(guessedLetters);
 };
 
 const updatePage = function () {
-    guessTheLetter.innerText = "";
+    guessTheLetter.innerHTML = "";
     for (let guess in guessedLetters) {
         const li = document.createElement("li");
         li.innerText = guessedLetters[guess];
@@ -99,8 +86,6 @@ const updateWord = function (guessedLetters) {
     const wordUpper = word.toUpperCase();
     const wordArray = wordUpper.split("");
     const newUpdate = []
-    //console.log(wordArray);
-    // Check if the wordArray contains any letters from the guessedLetters array. 
     for (let letter in wordArray) {
         if (guessedLetters.includes(wordArray[letter])) {
             newUpdate.push(wordArray[letter])
@@ -108,11 +93,7 @@ const updateWord = function (guessedLetters) {
             newUpdate.push("●")
         };
     };
-        //replace circle with that letter
-    //}
-    // If it does contain any of the letters, update the circle symbol with the correct letter. 
-    // Hint: You’ll want to create a new array with the updated characters and then use join()
-    //      to update the empty paragraph where the word in progress will appear.
+       
    
     
     wordInProgress.innerHTML = newUpdate.join("")
@@ -130,7 +111,7 @@ const countGuesses = function (guess) {
     }
     if (remainingGuesses === 0)  {
         startOver();
-        message.innerText = `Game over! Your word was ${word}`;
+        message.innerHTML = `Game over! Your word was ${word}`;
         remaining.innerText = `${remainingGuesses} guesses`;
         
     } else if (remainingGuesses === 1) {
@@ -164,12 +145,11 @@ playAgain.addEventListener("click", function () {
     guessedLetters = [];
     remainingGuesses = 8;
     remaining.innerText = `${remainingGuesses} guesses`;
-    guessTheLetter.innerText = "";
-    message.innerHTML = "";
+    guessTheLetter.innerHTML = "";
+    message.innerText = "";
 
     getWord();
 
-    
     guess.classList.remove("hide");
     remainingGuessesElement.classList.remove("hide");
     guessTheLetter.classList.remove("hide");
@@ -178,6 +158,3 @@ playAgain.addEventListener("click", function () {
     document.querySelector("label").classList.remove("hide");
 
 });
-// Add a click event listener for the Play Again button. 
-// Remove the class of “win” applied to the message element. 
-// Empty the message text and the unordered list where the guessed letters appear.
